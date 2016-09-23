@@ -1,0 +1,104 @@
+<html>
+<head>
+	<title>flash cookie demo</title>
+	<meta charset="utf-8">
+</head>
+<body>
+<div id="result"></div>
+<div id="size"></div>
+
+<button class="set">存数据</button>
+<button class="get">取数据</button>
+<button class="remove">删数据</button>
+<button class="clear">清空数据</button>
+
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+;(function(){
+
+	var flashId = "_Flash_Storage_";
+	var flashPath = 'http://s0.qhimg.com/static/055a9acfbfce5048.swf?random=' + Math.random();
+
+	// 动态插入Flash
+	var insertFlash = function(path){
+		var container = document.createElement("div"), html = [];
+
+		if(window.ActiveXObject){
+			html.push('<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"',
+				' width="1" height="1" id="',flashId,'">',
+				'<param name="allowScriptAccess" value="always" />',
+				'<param name="movie" value="',path,'" /></object>');
+		}else{
+			html.push('<embed src="',path,'" width="1" height="1" id="',flashId,'" ',
+				'align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"/>');
+		}
+
+		var style = container.style;
+		style.position = "absolute";
+		style.top = "-9999px";
+		var body = document.body;
+		body.insertBefore(container, body.firstChild );
+		container.innerHTML = html.join("");
+		document.title=document.title.split("#")[0];
+	};
+
+
+	$(function(){
+		insertFlash(flashPath);
+	})
+
+	var setData = function(){
+       FlashCookie.set('name', 'lj');
+       FlashCookie.set('age', '30');
+	}
+	var getData = function(key){
+	    alert(FlashCookie.get(key));
+	}
+	var removeData = function(key){
+	       FlashCookie.remove(key);
+	}
+	var clearData = function(){
+	       FlashCookie.clear();
+	}
+	var showSize = function(){
+	    $('#size').html(FlashCookie.size() + '字节');
+	}
+	var showData = function(){
+	   var data = FlashCookie.getAll();
+	   var html = [];
+	   for(var i in data){
+	           html.push(i + ':' + data[i]);
+	   }
+	   $('#result').html(html.join('<br/>'));
+	   showSize()
+	}
+
+	$('.set').on('click', function(e){
+	       setData();
+	       showData();
+	})
+	$('.get').on('click', function(e){
+	       getData('name');
+	       showData();
+	})
+	$('.remove').on('click', function(e){
+	       removeData('age');
+	       showData();
+	})
+	$('.clear').on('click', function(e){
+	       clearData();
+	       showData();
+	})
+
+	var FlashCookie = null;
+	window.js_flash_cookie_init = function(){
+		FlashCookie = document.getElementById(flashId);
+		showData();
+		console.log('init')
+	}
+})();		
+
+</script>
+</body>
+</html>
