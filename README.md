@@ -18,10 +18,9 @@ flash cookie存储方案
  *
  * 由于flash和浏览器是两个独立的系统，flash加载成功到方法可被调用的话可能会有几十毫秒延时，需要注意这点
  * 
- * js_flash_cookie_init
- *
  * flash加载成功后调用的js函数，可以保证js执行的时候flash方法可以被正常调用
- * 
+ *
+ * js_flash_cookie_init()
  * 
  */
 ```
